@@ -1,0 +1,2 @@
+Tablas y relaciones que se necesitarían para implementar todas las funciones:
+

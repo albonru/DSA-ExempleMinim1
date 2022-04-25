@@ -10,9 +10,8 @@ import java.util.logging.Logger;
 public class ProductManagerImpl implements ProductManager{
 
     HashMap<String,User> hashUsuarios = new HashMap<String,User>(); //id con su usuario
-    HashMap<String,Product> hashProd = new HashMap<String,Product>(); //nombre con su producto
-    HashMap<Integer,Product> hashProductosP = new HashMap<Integer,Product>(); //producto con su precio
-    HashMap<Integer,Product> hashProductosV = new HashMap<Integer,Product>(); //producto con su numero de ventas
+    HashMap<String,Product> hashProductos = new HashMap<String,Product>(); //nombre con su producto
+    LinkedList<Product> listaProductos = new LinkedList<Product>();
     LinkedList<Pedido> listaPedidosPendientes= new LinkedList<Pedido>();
 
     static final Logger logger = Logger.getLogger(ProductManagerImpl.class.getName());
@@ -30,7 +29,7 @@ public class ProductManagerImpl implements ProductManager{
 
     @Override
     public List<Product> listaProductosPrecio() {
-        List<Product> resultado = new LinkedList<>(hashProductosP.values());
+        List<Product> resultado = new LinkedList<>(listaProductos);
 
         Collections.sort(resultado, new Comparator<Product>() {
             @Override
@@ -44,7 +43,7 @@ public class ProductManagerImpl implements ProductManager{
 
     @Override
     public List<Product> listaProductosVentas() {
-        List<Product> resultado = new LinkedList<>(hashProductosV.values());
+        List<Product> resultado = new LinkedList<>(listaProductos);
 
         Collections.sort(resultado, new Comparator<Product>() {
             @Override
@@ -94,16 +93,23 @@ public class ProductManagerImpl implements ProductManager{
 
     @Override
     public Product getProductByName(String name) {
-        Product p = this.hashProd.get(name);
+        Product p = this.hashProductos.get(name);
         return p;
+    }
+
+    public void addProductToList(Product p) {
+        this.listaProductos.add(p);
+    }
+
+    public List<Product> getListaProductos() {
+        return this.listaProductos;
     }
 
     @Override
     public void clear() {
         this.listaPedidosPendientes.clear();
-        this.hashProd.clear();
-        this.hashProductosP.clear();
-        this.hashProductosV.clear();
+        this.hashProductos.clear();
+        this.listaProductos.clear();
         this.hashUsuarios.clear();
     }
 }
