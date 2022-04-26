@@ -16,6 +16,11 @@ public class User {
 
     public User() {}
 
+    public User(String id) {
+        this.id = id;
+        this.listaPedidos = new LinkedList<>();
+    }
+
     public User(String nombre, String id) {
         this.nombre = nombre;
         this.id = id;

@@ -5,6 +5,7 @@ import java.util.HashMap;
 public class Pedido {
     private String id;
     private HashMap<Integer,String> listaProductos = null; //cada producto con su cantidad
+    //es podria fer nomes amb una llista LL -> anar expandint segons cal
     private String userId; //usuari que ha fet la comanda
 
     public Pedido() {}

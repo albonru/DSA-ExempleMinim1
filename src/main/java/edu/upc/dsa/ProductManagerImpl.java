@@ -10,9 +10,8 @@ import java.util.logging.Logger;
 public class ProductManagerImpl implements ProductManager{
 
     HashMap<String,User> hashUsuarios = new HashMap<String,User>(); //id con su usuario
-    HashMap<String,Product> hashProductos = new HashMap<String,Product>(); //nombre con su producto
     LinkedList<Product> listaProductos = new LinkedList<Product>();
-    LinkedList<Pedido> listaPedidosPendientes= new LinkedList<Pedido>();
+    Queue<Pedido> cuaPedidosPendientes= new LinkedList<Pedido>();
 
     static final Logger logger = Logger.getLogger(ProductManagerImpl.class.getName());
     private static ProductManagerImpl manager;
@@ -25,11 +24,11 @@ public class ProductManagerImpl implements ProductManager{
         return manager;
     }
 
-    public ProductManagerImpl(){}
+    private ProductManagerImpl(){}
 
     @Override
     public List<Product> listaProductosPrecio() {
-        List<Product> resultado = new LinkedList<>(listaProductos);
+        List<Product> resultado = new LinkedList<>(this.listaProductos);
 
         Collections.sort(resultado, new Comparator<Product>() {
             @Override
@@ -43,7 +42,7 @@ public class ProductManagerImpl implements ProductManager{
 
     @Override
     public List<Product> listaProductosVentas() {
-        List<Product> resultado = new LinkedList<>(listaProductos);
+        List<Product> resultado = new LinkedList<>(this.listaProductos);
 
         Collections.sort(resultado, new Comparator<Product>() {
             @Override
@@ -57,14 +56,14 @@ public class ProductManagerImpl implements ProductManager{
     }
 
     @Override
-    public void realizarPedido(String userId, String pedidoId) {
-        Pedido pedido = new Pedido(userId, pedidoId);
-        listaPedidosPendientes.add(pedido);
+    public void realizarPedido(String userId, Pedido pedido) {
+        pedido.setUser(userId);
+        this.cuaPedidosPendientes.add(pedido);
     }
 
     @Override
-    public void servirPedido() {
-        Pedido pedido = listaPedidosPendientes.getFirst();
+    public Pedido servirPedido() {
+        Pedido pedido = this.cuaPedidosPendientes.poll();
         HashMap<Integer,String> p = pedido.getPedido();
         for (Integer i : p.keySet()) {
             Product product = getProductByName(p.get(i));
@@ -73,15 +72,14 @@ public class ProductManagerImpl implements ProductManager{
 
         User user = getUserById(pedido.getUserId());
         user.addPedido(pedido);
+        return pedido;
     }
 
     @Override
     public List<Pedido> listaPedidosUsuario(String userId) {
         User user = getUserById(userId);
         List<Pedido> listaPedidos = user.getListaPedidos();
-        for (Pedido pedido: listaPedidos) {
 
-        }
         return listaPedidos;
     }
 
@@ -93,8 +91,17 @@ public class ProductManagerImpl implements ProductManager{
 
     @Override
     public Product getProductByName(String name) {
-        Product p = this.hashProductos.get(name);
-        return p;
+        for (Product product: this.listaProductos) {
+            if (product.getNombre().equals(name)) {
+                return product;
+            }
+        }
+        return null;
+    }
+
+    public void addUser(String id) {
+        User user = new User(id);
+        this.hashUsuarios.put(user.getId(), user);
     }
 
     public void addProductToList(Product p) {
@@ -107,8 +114,7 @@ public class ProductManagerImpl implements ProductManager{
 
     @Override
     public void clear() {
-        this.listaPedidosPendientes.clear();
-        this.hashProductos.clear();
+        this.cuaPedidosPendientes.clear();
         this.listaProductos.clear();
         this.hashUsuarios.clear();
     }

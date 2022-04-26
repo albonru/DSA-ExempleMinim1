@@ -21,6 +21,10 @@ public class PedidosTest {
         pm.addProductToList(p3);
 
         User u1 = new User("Alba", "1");
+        User u2 = new User("Aleix","2");
+
+        pm.addUser("1");
+        pm.addUser("2");
 
         logger.info("Lista de productos al FINAL del setUp: " + pm.getListaProductos());
     }
@@ -36,7 +40,7 @@ public class PedidosTest {
         pedido.addProduct(1, "Ternera");
         pedido.addProduct(2,"Noodles");
 
-        pm.realizarPedido("1","1");
+        pm.realizarPedido("1",pedido);
     }
 
     public void testServirPedido() {

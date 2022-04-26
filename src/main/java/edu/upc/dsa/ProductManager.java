@@ -9,8 +9,8 @@ import java.util.List;
 public interface ProductManager {
     public List<Product> listaProductosPrecio(); //precio ascendente
     public List<Product> listaProductosVentas(); //numero de ventas descendente
-    public void realizarPedido(String userId, String pedidoId); //distintos productos, diferentes cantidades
-    public void servirPedido(); //en orden de llegada
+    public void realizarPedido(String userId, Pedido p); //distintos productos, diferentes cantidades
+    public Pedido servirPedido(); //en orden de llegada, retorna comanda
     public List<Pedido> listaPedidosUsuario(String userId); //pedidos ya realizados
 
     public User getUserById(String id);
@@ -18,4 +18,5 @@ public interface ProductManager {
     public void clear();
     public void addProductToList(Product p);
     public List<Product> getListaProductos();
+    public void addUser(String id);
 }

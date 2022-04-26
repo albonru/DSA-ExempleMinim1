@@ -67,4 +67,10 @@ public class ProductService {
         return Response.status(201).entity(entity).build();
     }
 
+    //realizar pedido -> POST
+
+    //{"userId": "388111211",  items: [{q: 2, p:'coca-cola'},{q:1, p:'bocata de pernil'},{q: 1, p:'donut'}}
+
+    //servir pedido
+
 }
